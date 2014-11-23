@@ -1,0 +1,1160 @@
+%% This is file `elsarticle-template-2-harv.tex',
+%%
+%% Copyright 2009 Elsevier Ltd
+%%
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%%
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%%
+%% The list of all files belonging to the 'Elsarticle Bundle' is
+%% given in the file `manifest.txt'.
+%%
+%% Template article for Elsevier's document class `elsarticle'
+%% with harvard style bibliographic references
+%%
+%% $Id: elsarticle-template-2-harv.tex 155 2009-10-08 05:35:05Z rishi $
+%% $URL: http://lenova.river-valley.com/svn/elsbst/trunk/elsarticle-template-2-harv.tex $
+%%
+
+%%\documentclass[preprint,authoryear,12pt]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[authoryear,preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+
+%% Astronomy & Computing uses 5p
+%% \documentclass[final,authoryear,5p,times]{elsarticle}
+\documentclass[final,authoryear,5p,times,twocolumn]{elsarticle}
+
+%% if you use PostScript figures in your article
+%% use the graphics package for simple commands
+%% \usepackage{graphics}
+%% or use the graphicx package for more complicated commands
+\usepackage{graphicx}
+%% or use the epsfig package if you prefer to use the old commands
+%% \usepackage{epsfig}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+\usepackage[pdftex,draft,pdfpagemode={UseOutlines},bookmarks,bookmarksopen,colorlinks,linkcolor={blue},citecolor={green},urlcolor={red}]{hyperref}
+\usepackage{hypernat}
+
+%% Alternatives to hyperref for testing
+%\usepackage{url}
+%\newcommand{\htmladdnormallinkfoot}[2]{#1\footnote{\texttt{#2}}}
+%\newcommand{\htmladdnormallink}[1]{\texttt{#1}}
+%\newcommand{\href}[2]{\texttt{#2}}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+%% \usepackage{lineno}
+
+%% natbib.sty is loaded by default. However, natbib options can be
+%% provided with \biboptions{...} command. Following options are
+%% valid:
+
+%%   round  -  round parentheses are used (default)
+%%   square -  square brackets are used   [option]
+%%   curly  -  curly braces are used      {option}
+%%   angle  -  angle brackets are used    <option>
+%%   semicolon  -  multiple citations separated by semi-colon (default)
+%%   colon  - same as semicolon, an earlier confusion
+%%   comma  -  separated by comma
+%%   authoryear - selects author-year citations (default)
+%%   numbers-  selects numerical citations
+%%   super  -  numerical citations as superscripts
+%%   sort   -  sorts multiple citations according to order in ref. list
+%%   sort&compress   -  like sort, but also compresses numerical citations
+%%   compress - compresses without sorting
+%%   longnamesfirst  -  makes first citation full author list
+%%
+%% \biboptions{longnamesfirst,comma}
+
+% \biboptions{}
+
+\journal{Astronomy \& Computing}
+
+%% Make single quotes look right in verbatim mode
+\usepackage{upquote}
+
+\usepackage{upgreek}
+
+% Aim to be consistent, and correct, about how we refer to sections
+% tables, and figures.
+\newcommand*\secref[1]{Sect.~\ref{#1}}
+\newcommand*\figref[1]{Fig.~\ref{#1}}
+\newcommand*\tabref[1]{Table~\ref{#1}}
+\newcommand{\locator}{\emph{locator}}
+\newcommand{\locators}{\emph{locators}}
+\newcommand{\new}{HDSv5}
+\newcommand{\old}{HDSv4}
+
+\begin{document}
+
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for the associated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for the associated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for the associated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%%
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \address{Address\fnref{label3}}
+%% \fntext[label3]{}
+
+\title{Reimplementing the Hierarchical Data System using HDF5}
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{<author name>}
+%% \address[label1]{<address>}
+%% \address[label2]{<address>}
+
+\author[cornell]{Tim Jenness\corref{cor1}}
+\ead{tjenness@cornell.edu}
+
+\cortext[cor1]{Corresponding author}
+
+\address[cornell]{Department of Astronomy, Cornell University, Ithaca,
+  NY 14853, USA}
+
+\begin{abstract}
+%% Text of abstract
+The Starlink Hierarchical Data System has been a very successful niche
+astronomy file format and library for over 30 years. Development of the library
+was frozen ten years ago when funding for Starlink was stopped and almost no-one
+remains who understands the implementation details. To ensure the
+long-term sustainability of the Starlink application software and to
+make the extensible N-Dimensional Data Format for acessible to a
+broader range of users, we propose to re-implement the HDS library
+application interface as a layer on top of the Hierarchical Data
+Format version 5. We present an overview of the new implementation of
+version 5 of the HDS file format and describe differences between the
+expectations of the HDS and HDF5 library interfaces. We finish by
+comparing the old and new HDS implementations by looking at a
+comparison of file sizes and by comparing performance benchmarks.
+
+\end{abstract}
+
+\begin{keyword}
+%% keywords here, in the form: keyword \sep keyword
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+
+data formats \sep
+Starlink \sep
+
+\end{keyword}
+
+\end{frontmatter}
+
+% \linenumbers
+
+%% Journal abbreviations
+\newcommand{\mnras}{MNRAS}
+\newcommand{\aap}{A\&A}
+\newcommand{\aaps}{A\&AS}
+\newcommand{\pasp}{PASP}
+\newcommand{\apj}{ApJ}
+\newcommand{\apjs}{ApJS}
+\newcommand{\qjras}{QJRAS}
+\newcommand{\an}{Astron.\ Nach.}
+\newcommand{\ijimw}{Int.\ J.\ Infrared \& Millimeter Waves}
+\newcommand{\procspie}{Proc.\ SPIE}
+\newcommand{\aspconf}{ASP Conf. Ser.}
+
+%% Applications
+
+\newcommand{\KAPPA}{\textsc{kappa}}
+\newcommand{\gaia}{\textsc{gaia}}
+\newcommand{\figaro}{\textsc{figaro}}
+\newcommand{\ccdpack}{\textsc{ccdpack}}
+\newcommand{\smurf}{\textsc{smurf}}
+\newcommand{\surf}{\textsc{surf}}
+\newcommand{\asterix}{\textsc{asterix}}
+\newcommand{\specdre}{\textsc{specdre}}
+\newcommand{\iras}{\textsc{iras90}}
+\newcommand{\treeview}{\textsc{treeview}}
+\newcommand{\splat}{\textsc{splat}}
+\newcommand{\catpac}{\textsc{catpac}}
+\newcommand{\CFITSIO}{\textsc{cfitsio}}
+\newcommand{\fitstondf}{\textsc{fits}{\footnotesize{2}}\textsc{ndf}}
+
+%% Links
+\newcommand{\ascl}[1]{\href{http://www.ascl.net/#1}{ascl:#1}}
+
+%% main text
+\section{Introduction}
+\label{sec:intro}
+
+The Hierarchical Data System (HDS) was created by the Starlink Project
+in the United Kingdom in the early 1980s
+\citep{1982QJRAS..23..485D,1991STARB...8....2L}. The requirements were
+to have a file format that was optimized for data processing
+applications: allowing for efficient access of data arrays through
+memory mapping, grouping of related data structures in a hierarchy to
+make it easy to move data \emph{en masse} from one location to
+another, and easy modification of data and structures. At the time
+FITS \citep{1981A&AS...44..363W} was mainly thought of as a transport
+format distributed on tape \citep{1980SPIE..264..298G}, and the NCSA
+Hierarchical Data Format would not be developed until the end of the
+decade \citep{HDF1,Folk2010}. It was therefore decided to develop a
+new file format from scratch. Initially called the Starlink Data
+System before being rebrand as HDS, the first version of the library
+was written in BLISS-32 before being ported to C on VAX/VMS in the
+late 1980s \citep{SSN27a}.
+
+HDS succeeded in its goal of forming the basis of the Starlink data
+reduction software packages (\ascl{1110.012}) and was and is being
+used at UK observatories for data acquisition and for data reduction
+pipelines \citep{2011tfa..confE..42J,2015oracdr}. Its presence was
+pervasive within the Starlink software stack, being used for parameter
+storage in the ADAM system \citep{1992ASPC...25..126A} and in a
+graphics database system \citep{SUN48} in addition to storing
+astronomy data and forming the basis of the Starlink
+\emph{N}-Dimensional Data Format library \citep[NDF;][]{2015Jenness}. There was
+very little take up of the format outside the UK community \citep[but
+see e.g.,][]{1993STARB..12...10M} and as FITS came to be used as a data
+processing format as well as a transport and archive format, HDS has become a niche product.
+
+HDF5 is a popular file format in other scientific disciplines and is
+used in fields such as Earth science \citep[e.g.,][]{2005Yang}, biology
+\citep[e.g.,][]{Dougherty:2009:UBI:1562764.1562781}, nuclear physics
+\citep[e.g.,][]{1742-6596-425-6-062008}, and molecular simulations
+\citep[e.g.,][]{deBuyl20141546}. The astronomy community is currently
+discussing the wider issues of file formats beyond FITS
+\citep{B1_adassxxiv,2015Thomas} and HDF5 is being adopted
+\citep[e.g.,][]{2012ASPC..461..283A} or investigated
+\citep[e.g.,][]{P3-1_adassxxiv,O4-4_adassxxiv} in a number of astronomy
+projects.
+
+Given this context it is therefore worth investigating whether there
+should be a new version of HDS that is based on HDF5. In this paper we
+compare the HDS and HDF5 data models, discuss the motivations for such
+a change, and describe an implementation.
+
+\section{Motivation}
+
+There are a number of key motivators for migrating from the current HDS
+format to a more widely-recognized format:
+\begin{enumerate}
+\item Opaque implementation details of the library and format with no
+  resident expert or associated documentation.
+\item Lack of support for 64-bit dimensions sizing.
+\item HDS has no provision for transparent data compression.
+\item HDS has no native support for tables.
+\item Sociological impediment to adopting a niche format in the wider
+  astronomy community.
+\end{enumerate}
+We will discuss each of these in turn.
+
+\subsection{Opaque implementation}
+
+The Starlink Project was closed in 2005 after 25 years of
+operation. The Starlink Software Collection continues to be developed
+as an open-source project sponsored by the Joint Astronomy Centre to
+continue support for their data reduction pipelines. Unfortunately
+none of the remaining developers understand how HDS works and there is
+no motivation for anyone to learn. The most recent description of the
+internals of the HDS file format is in \citet{SSN27a} which documents
+version 2 of the format. Version 3 (from the port to Unix in 1991) and
+version 4 (in 2005 to support files larger than 2GB) remain
+undocumented with an assumption that the design closely matches the
+original layout. For a data format that is used as an archive format
+\citep{2015Economou} this lack of documentation and understanding
+represents a risk for long-term access to the data.
+
+\subsection{64-bit dimension sizes}
+
+The HDS library does not currently support 64-bit dimension
+sizes. This was partially implemented for version 4 of the format but
+does not work. It is not clear how much work it would be to finish
+this work or whether anyone remaining can do so. As data rates
+increase it is clear that the next generation of heterodyne arrays
+\citep[e.g.,][]{jenness_spie2014} will generate data cubes that exceed
+the capacity of a 32-bit integer counter and these files will render
+the Starlink software and associated data pipelines unusable without
+HDS being upgraded.
+
+\subsection{Data Compression}
+
+HDF5 supports transparent data compression of datasets using a number
+of algorithms in addition to supporting a pluggable architecture. HDS
+does not support any data compression and relies on the facilities of
+the NDF library to provide these. NDF can support gzipped data files,
+requiring a temporary file, as well as FITS-style
+\texttt{BSCALE}/\texttt{BZERO} and a delta compression scheme
+natively. Leveraging the HDF5 compression algorithms would be a very
+easy way to improve the data compression performance in NDF.
+
+\subsubsection{Native Tables}
+
+Unlike FITS \citep{1988A&AS...73..365H} or HDF5, HDS does not have a
+native table data structure. Tables must be implemented as a
+collection of independent columns and this can be extremely
+inefficient for row access. Switching data formats raises the
+possibility to add a native table access API to HDS.
+
+\subsection{Sociology}
+
+One of the impediments to adoption of the NDF data model is that the
+reference library implementation uses HDS as the underyling file
+format. Whilst the NDF data model itself does not require HDS and
+could be implemented by anyone with sufficient effort available, to
+adopt NDF currently requires that users adopt HDS. This is true for
+all the Starlink applications which require the \textsc{convert}
+package be used to migrate from FITS and other formats to NDF/HDS.
+Adopting HDF5 would considerably lower the barrier to entry and make
+data files accessible to tools such as \texttt{HDFview} and
+\texttt{h5py}. Of course, none of these tools will understand the NDF
+data model that defines the hierarchical grouping but it makes it
+easier for other tools to adopt some of the same conventions.
+
+\section{Features of HDS}
+
+How HDS is used depends on a data model and the data access
+model. Both of these are important when considering a change in
+implementation.
+
+\subsection{Data Model}
+
+\begin{table*}[!ht]
+\caption{HDS basic data types. The unsigned types did not correspond
+  to standard Fortran~77 data types and were included for
+  compatibility with astronomy instrumentation. HDS supports both VAX
+  and IEEE floating-point formats. The API code indicates the letter appended
+  to function names to indicate the type they support. This convention is
+  used for the \textsc{generic} templating system \citep{SUN7}. For
+  compatibility with HDS the \_LOGICAL type is a 32-bit bitfield type
+  in memory but stored in an HDF5 file using 8 bits. HDS strings are
+  always stored in Fortran space-padded form and that convention is
+  adopted in the HDF5 HDS implementation.}
+\label{tab:hdstypes}
+\begin{center}
+\begin{tabular}{llll}
+\hline
+Name of type & API Code & Data type & HDF5 Data type  \\ \hline
+\texttt{\_BYTE} & b & Signed 8-bit integer & H5T\_NATIVE\_INT8 \\
+\texttt{\_UBYTE} & ub & Unsigned 8-bit integer & H5T\_NATIVE\_UINT8\\
+\texttt{\_WORD} & w & Signed 16-bit integer &   H5T\_NATIVE\_INT16\\
+\texttt{\_UWORD} & uw & Unsigned 16-bit integer &  H5T\_NATIVE\_UINT16 \\
+\texttt{\_INTEGER} & i & Signed 32-bit integer &  H5T\_NATIVE\_INT32 \\
+\texttt{\_INT64} & k &Signed 64-bit integer & H5T\_NATIVE\_INT64 \\
+\texttt{\_LOGICAL} & l & Boolean & H5T\_NATIVE\_B8 \\
+\texttt{\_REAL} & r & 32-bit float & H5T\_NATIVE\_FLOAT \\
+\texttt{\_DOUBLE} & d & 64-bit float & H5T\_NATIVE\_DOUBLE \\
+\texttt{\_CHAR[$*$n]} & c & String of 8-bit characters  & H5T\_STRING\\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
+
+
+HDS is a hierarchical file format where named structures can contain
+other named structures or named primitive data arrays. It is
+self-describing in the sense that each layer in the hierarchy can be
+queried to obtain the number of members below (for structures), their
+names and their types.
+
+The primitive objects support numerical and string types with up to 7
+dimensions. The supported data types are shown in
+Table\,\ref{tab:hdstypes} and the choice and names reflect the origins
+of the format as a library designed to be used from Fortran.
+
+All HDS components are typed and this includes structures. Structure
+typing is important in HDS as it can be used by an application to
+decide whether a structure can be understood or not. In object-oriented
+nomenclature the type can be thought of as the object class, whereas the
+name of the structure is an object instance.
+
+HDS supports the concept of arrays of structures to allow a collection
+of identical structures to be grouped together. This is used
+extensively in the lower-levels of the Starlink software stack, for example to
+support history recording (an array of structures of type
+\texttt{HISTORY} which is extended each time a new history record is
+created), or picture definitions in the graphics database.
+
+\subsection{Data Access Model}
+
+To obtain access to an object within an HDS file the caller must
+obtain a \locator; an opaque C \texttt{struct} containing information
+about the object needed by the HDS library. These \locators\ mediate
+all access to the HDS data file.
+
+\paragraph{Component copying}
+
+As a consequence of the hierarchical design, it is possible to copy or
+move arbitrary parts of the tree to other locations within a file or
+locations in different files.
+
+\paragraph{Primary and secondary locators}
+
+The library has a concept of primary and secondary \locators\ such that
+when all primary \locators\ associated with a file are freed (or
+\emph{annulled} in HDS parlance) all resources associated with that
+file are also closed and all secondary locators become inactive.
+
+\paragraph{Locator Groups}
+
+It is possible to assign locators to a named group. Any child locators
+are also members of the group. When the group is no longer required it
+can be flushed with a single command, freeing all the locators that
+are in the group. This simplifies the management of large numbers
+of related locators and allows the resources to be freed at one place
+in the code without having to store them all in user code.
+
+\paragraph{Slicing}
+
+Arrays of structures can not be accessed directly but must instead be
+accessed by requesting a specific \emph{cell}. Primitive data arrays
+can also be accessed by individual cells but it is more common to
+access data arrays by specifying slices. A slice can be requested by
+specifying upper and lower bounds of each dimension. The Fortran
+heritage requires that these bounds are indexed starting with a lower
+bound of 1 rather than 0, and all data arrays are specified in Fortran
+order; even from the C interface. In some cases the dimensionality is
+unimportant and the library allows a \locator\ to be vectorized such
+that subsequent interrogations of the locator will indicate that the
+object is 1-dimensional regardless of the underlying shape. This can
+be very useful for such activities as examining every element in turn,
+or picking the first few elements. Vectorizing works for structures
+and primitives and does not affect the file itself.
+
+\paragraph{Automatic type conversion}
+
+For primitive arrays, the data to be stored or the data to be
+retrieved do not have to be the same type as the format of the data
+stored in disk. Floating point data will be converted to integer and
+vice versa. Also, string and logical/boolean types will be converted
+to numbers and numbers can be retrieved as strings or
+logicals. Endianness and floating point representation is also handled
+transparently, and the native form is used when a file is created.
+
+\paragraph{Memory Mapping}
+
+One of the initial requirements for HDS was efficient access to data
+arrays. This was done using direct mapping of the relevant part of the
+file into memory\footnote{Using \texttt{mmap()} on POSIX systems} and
+was implemented for read and write operations.
+
+\section{Requirements for an Updated Format}
+
+The Starlink software collection consists of more than 2.3 million
+lines of Fortran, C and C++ and a large fraction of that code depends
+on the HDS library and the HDS API. This includes fundamental
+infrastructure such as ADAM that is used by all applications. It is
+therefore imperative that the API for HDS remains the same even with
+the implementation changing underneath. Any new version of HDS should
+meet the following requirements:
+
+\begin{enumerate}
+\item The API should not change.
+\item It should be possible to use both old and new format files in
+  the same application.
+\item The application should behave in the same way with new files as
+  it does with old files.
+\item The application source code should not need to be modified in
+  any way to use the new library.
+\item The new format should not impact performance of the application
+  in a negative way or require more computer resources.
+\end{enumerate}
+
+These are similar to the requirements described when NetCDF version 4
+was implemented on top of HDF5 \citep{2004Rew}.
+
+\section{HDS Version 5}
+
+Given the broad adoption of HDF5 in the scientific community and the
+close similarity in key parts of the data model between it and HDS, it
+was decided to write a prototype implementation of the HDS API in
+terms of HDF5. This would provide information on the feasibility of
+the approach and also highlight the areas where the data models or
+access models diverge. The previous version of HDS was version 4 so it
+was decided this version would be version 5\footnote{Somewhat
+  confusingly the library implementing version 4 of the file format is
+  itself version 5}. In the rest of this paper we use the shorthand
+\new\ to refer to the new library implementation and format, and \old\
+to refer to the current version of the HDS format and library.
+
+\subsection{Library Architecture}
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=0.7\columnwidth]{LibraryArchitecture}
+\end{center}
+\caption{Architecture of the HDF5-based implementation of HDS. A
+  wrapper library with the public HDS API forwards calls to the
+  correct version of the library. The Fortran interface is a separate
+  library as it also contains Fortran code that would require a
+  Fortran runtime library.}
+\label{fig:arch}
+\end{figure}
+
+In order to support both new and old file formats it was necessary for
+the new library to have access to a complete copy of the existing
+library. The HDF5-based library and the \old\ library are both
+standalone libraries that are linked in to a wrapper library that
+implements the public interface. The versioned libraries can be
+configured to provide the public API but when used as part of the
+unified wrapper they are built with names that include the version
+number to avoid symbol clashes.
+
+The wrapper library is responsible for forwarding the calls to the
+correct underlying library. There are four major API styles that must
+be handled: functions that open files and return locators, functions
+that create files, functions that copy from one locator to another,
+and functions that work with a single locator.
+
+When a request is made to open a new file, it is first sent to the
+\old\ library to see if it opens. If that fails because with a format
+invalid error the \new\ library is used to open the file. This will be
+inefficient when files are mainly in the newer format but it is
+currently proving unreliable to use the \new\ library first. The
+reason for this is that the HDF5 library has limited error codes for
+opening files and it is not possible to distinguish an error opening a
+file because of a format incompatibility and some other type of
+error. The HDF5 library does provide a routine for checking whether a
+file is an HDF5 file or not but unfortunately that routine returns
+false if the file has not yet been closed (which can happen in
+applications where the file is opened for write, and then opened for
+update in the same process).
+
+When files are to be created the choice of format is controlled by a
+tuning parameter. Tuning parameters in HDS can be set programmatically
+or by reading the environment. By default, files are still created in
+\old\ format using the principal of least surprise. The ability to
+control this behavior from an environment variable simplifies testing
+and benchmarking.
+
+When copying one locator to another locator of a different type,
+tree-walking code had to be written using the HDS public API. The code
+recursively walks through structures copying primitives and other
+structures as required.
+
+The bulk of the API takes a single locator as input and does something
+with it that may or may not result in a new locator being created. We
+have taken a slightly different approach to that described in
+\citet{2004Rew}. In that paper they registered function table lookups
+with the newly created data objects, allowing efficient forwarding to
+the particular library. We decided to take a simpler approach whereby
+the locator structure in \old\ and \new\ were adjusted so that they
+both included a version integer as the first member. The wrapper code
+then simply checks for the version number in the structure and calls the
+relevant routine. This approach does simplify the addition of
+debugging messages and error reporting from each routine at the
+expense of some calling efficiency.
+
+The wrapper code responsible for this forwarding is generated from the
+public HDS header file using a simple Python program. This allows the
+forwarding scheme to be changed relatively easily.
+
+
+\subsection{The Locator Interface}
+
+As mentioned previously, a \locator\ is an opaque C \texttt{struct}
+containing information about a particular object in the HDS file. The
+sizeof of these \texttt{HDSLoc*} structures differs between the two
+implementations and this required that a change be made to the Fortran
+interface of the HDS library. For historical reasons an HDS \locator\
+is stored in a Fortran character array with a length specified by the
+HDS constant \texttt{DAT\_\_SZLOC} (currently 16 characters). In
+\old\ the C structure is really a proxy to an internal data
+structure and the Fortran interface copied the contents of the
+structure to and from the Fortran string. In \new, the C
+structure is significantly larger and it was unreasonable to increase
+the Fortran \locator\ size. To support both implementations the
+Fortran interface was changed such that the structure address was
+stored in the Fortran string buffer and the size of the string was
+kept at 16 characters. This allowed the new library to be installed
+without requiring that any applications be relinked.
+
+
+\subsection{Error handling}
+
+HDS uses the Starlink Error Message Service \citep[EMS;][]{SSN4} for
+error handling. EMS uses the concept of inherited status where each
+function takes a status argument and usually returns immediately if
+status is non-zero (when resources are to be freed it is usual for the
+freeing routine to try to execute regardless). If an error condition
+is to be reported by a function it sets the status to an appropriate
+value and attaches an error message to the message stack. As the call
+stack unwinds the error could either be annulled (the calling function
+may wish to react to the error by trying an alternative) or be
+augmented with more information.
+
+HDF5 uses a similar error message stack and status code concept
+internally but uses a function return value to indicate to the
+external user that a problem has occurred. If the return value is
+negative the call failed. The error messages and specific status code
+must then be retrieved separately. In \new\ each call to HDF5 is
+wrapped by a C macro that intercepts the status return and if
+necessary queries the HDF5 error message stack and places each of the
+messages on to the EMS message stack.
+
+In some cases the HDF5 status code is translated to an equivalent HDS
+error code but in many cases the HDF5 codes are not specific enough
+and in that case a generic \emph{error from HDF5} code is used.
+
+\subsection{Data Model}
+
+In HDF5, structures are known as \emph{groups} and primitives are
+known as \emph{datasets}. Table\,\ref{tab:hdstypes} shows the mapping
+of HDS data types to the HDF5 equivalents and the type system is
+significantly more advanced in HDF5. It was decided that boolean types
+should be represented in the files as 8-bit bitfields rather than the
+32-bit integer type that is used (part of the Fortran legacy). The
+in-memory datatype is a 32-bit integer for consistency with the public
+API but the smaller type is used on disk. A bitfield type is used as
+this allows the HDS type query to be able to distinguish the
+\texttt{\_BYTE} type from \texttt{\_LOGICAL} type without requiring
+the use of HDF5 attributes. Strings in HDS are space-padded fixed size
+following the Fortran style and this is how strings are stored in
+\new. Datasets are stored in HDF5 files in C dimension order with the
+dimensions being reversed when viewed from HDS. This is the same
+approach taken by the HDF5 Fortran interface with the variation that
+the HDS C view of an array must agree with Fortran.
+
+HDF5 has no concept of arrays of structures so this facility is
+implemented entirely by the \new\ library. The containing group is
+created and within it are placed the number of groups corresponding to
+the array size. Each of these groups is given a name that contains a
+root string chosen to deliberately be longer than the maximum allowed
+length of an HDS component, appended with the coordinates of the
+structure in the array. For a 2-dimensional array of structures the
+name of the group could be \texttt{ARRAY\_OF\_STRUCTURES\_CELL(2,3)}
+for the group at coordinate (2,3). This naming scheme simplifies
+access to an individual structure (just provide the coordinates) and
+also simplifies reporting of the full path using HDS nomenclature: to
+convert the HDF5 path of the structure
+\texttt{ROOT/HISTORY/ARRAY\_OF\_STRUCTURES\_CELL(3)} to the HDS path,
+just requires the removal of the fixed cell prefix to convert it to
+\texttt{ROOT.HISTORY(3)}\footnote{HDS uses dot separators rather than
+  directory separators when specifying a path within a data file}. The
+long structure name is hidden by the HDS library and only visible when
+the file is accessed using HDF5 tools. When an array of structures has
+been created the dimensionality is stored in an attribute named
+\texttt{HDS\_STRUCTURE\_DIMS}.
+
+Finally, the data type of a structure is not a fundamental part of
+HDF5 so this information is stored in an attribute with name
+\texttt{CLASS} following the convention used in other HDF5 data models
+such as the Image and Palette classes.
+
+For a comparison of the HDS view of a file with that of the HDF5
+library, here is a structure trace of a very simple NDF file generated
+by the HDS standard tracing tool, \textsc{hdstrace} \citep{SUN102}:
+
+\begin{quote}
+\small
+\begin{verbatim}
+IMAGE  <NDF>
+  DATA_ARRAY  <ARRAY>     {structure}
+    DATA(2)     <_INTEGER>   1,2
+\end{verbatim}
+\end{quote}
+and here is the corresponding dump of the HDF5 contents using the
+standard \texttt{h5dump} command (with the definition of the
+\texttt{H5T\_STRING} strings datatype elided for clarity)
+\begin{quote}
+\small
+\begin{verbatim}
+GROUP "/" {
+   ATTRIBUTE "CLASS" {
+      DATATYPE  H5T_STRING {}
+      DATASPACE  SCALAR
+      DATA {
+      (0): "NDF"
+      }
+   }
+   ATTRIBUTE "HDS_ROOT_NAME" {
+      DATATYPE  H5T_STRING {}
+      DATASPACE  SCALAR
+      DATA {
+      (0): "IMAGE"
+      }
+   }
+   GROUP "DATA_ARRAY" {
+      ATTRIBUTE "CLASS" {
+         DATATYPE  H5T_STRING {}
+         DATASPACE  SCALAR
+         DATA {
+         (0): "ARRAY"
+         }
+      }
+      DATASET "DATA" {
+         DATATYPE  H5T_STD_I32LE
+         DATASPACE  SIMPLE { ( 2 ) / ( 2 ) }
+         DATA {
+         (0): 1, 2
+         }
+      }
+   }
+}
+\end{verbatim}
+\end{quote}
+
+These traces show that the mapping from HDS structure/primitive to
+HDF5 group/dataset is being followed with two attributes added to
+provide the metadata required by HDS.
+
+\subsection{Primary locators}
+
+In HDF5 the file is kept open until all identifiers associated with a
+file are closed. HDS distinguishes primary identifiers from secondary
+identifiers such that a file is only kept open when the primary count
+hits zero even if secondary identifiers remain. To implement this in
+\new\ it is necessary to store every locator that is allocated in a
+global data structure. We use the \texttt{uthash} macros \citep{uthash} to
+implement a hash table indexed by the HDF5 file identifier where each
+key corresponds to a value of a \texttt{utarray} dynamic array
+containing the locators with each locator having a flag indicating
+whether it is primary or secondary. The \texttt{uthash} macros were
+chosen since they did not require an additional library, they used a
+BSD license that was compatible with the \new\ library license, and
+the programming interface was reasonably straightforward.
+
+When each locator is annulled these data structures are scanned to
+check whether this locator was the final primary locator. If it is,
+all remaining locators are themselves annulled. One complication is
+that the file identifier returned will be different for each call to
+\texttt{H5Fopen} so it is important to determine which file
+identifiers are associated with the same file. Without accounting for
+this, critical locators may be annulled at the wrong time. Rather than
+attempt to guess what the HDF5 library has chosen to do by normalising
+supplied filenames, the virtual file driver layer is queried to obtain
+the Unix file descriptor. All file identifiers with a shared file
+descriptor are queried before deciding whether a file should be
+closed.
+
+One consequence of this behind-the-scenes freeing of resources is that
+it is possible for a library user that does not understand the
+distinction between primary and secondary locators to be left with
+pointers to structures that have been freed. To prevent unfortunate
+crashes, when a locator is freed automatically the contents of the
+structure are reset but the structure itself is not freed. This does
+result in a small memory leak but is thought to be more acceptable
+than a core dump.
+
+\subsection{Locator groups}
+
+Locator groups are not a featue of HDF5 and were implemented natively
+in the \new\ library. The implementation is similar to the primary
+locator system describied previously except that the key for the
+\texttt{uthash} mapping table is the group name rather than the file
+identifier. When a group is flushed, all locators in the group are
+annulled and the group is deleted from the hash table.
+
+\subsection{Array slicing}
+
+A very powerful feature of HDF5 is the concept of a dataspace. A
+dataspace determines the rank and dimensions of a dataset and is used
+to specify the size of the HDS primitives. When a slice or cell request is
+made a single hyperslab selection is made which adjusts the external
+view of the dataset. HDS slices and cells are much simpler than what
+is possible in a hyperslab selection, and are restricted to simple
+subsets of a region.
+
+When a locator is vectorized the dataspace associated with the locator
+is reshaped to be 1-dimensional. Subsequent slices of that vectorized
+dataspace are then handled in the same way as before using a hyperslab.
+
+\subsection{Type conversion}
+
+HDF5 supports an extremely broad range of data types and automatic
+conversion of numerical types when storing or retrieving a
+dataset. Critically, HDF5 does not support type conversion of string
+and logical types to numeric types (and vice versa) so this facility
+has been added explicitly in the \new\ library to maintain
+compatibility. This is simplified by HDS having the concept of a
+``bad'' or ``magic'' value for each datatype that can be used to
+indicate where a conversion was not possible.
+
+\subsection{Memory mapping}
+
+An important requirement for any HDS implementation has been to
+support direct memory mapping of files for both read and write
+operations. This has worked well over the years and helps minimize
+resource requirements. HDF5 has other priorities and advocates chunked
+access to minimize resources rather than providing direct access to
+the bytes on disk. The ability to split a dataset into multiple chunks
+and to insert arbitrary compression filters and virtual file drivers
+between the bytes trumps any perceived advantages of memory
+mapping. In the \new\ implementation memory mapping is only attempted
+if files are in read only mode, if HDF5 will return the byte offset to
+the start of the dataset, if the HDF5 type system indicates that the
+in-memory data type and the on-disk data types are compatible, and if
+the virtual file driver will provide a file descriptor. In all other
+cases memory is allocated using standard system calls when a user
+requests memory mapping, and the data are written back to the file
+when the data are ``unmapped''. Mapping can also be disabled using a
+tuning parameter.
+
+As a test a 4\,GB dataset was loaded into the GAIA visualization tool
+\citep[][\ascl{1403.024}]{2009ASPC..411..575D}. With memory mapping enabled
+the image displayed within two seconds and the process only used a
+fews tens of megabytes of memory. With memory mapping disabled it took
+about ten seconds to load the image and the process took 5\,GB of
+memory.
+
+The ability to memory map at all requires that datasets are created in
+single chunks and are not resizable. This causes some problems with
+HDS which assumes that all primitive objects are resizable. The \new\
+dataset resizing function therefore attempts to use the native
+HDF5 resizing function but is usually forced to create a new dataset
+and copy the contents from the existing dataset, before deleting the
+original and renaming the new dataset. This can result in significant
+unused space in an HDF5 file.
+
+\section{Implementation Issues}
+
+The prototype library has largely shown that replacing native HDS with
+an HDF5 implementation is feasible. Unfortunately we have found that
+there are some incompatibilities that have required minor code changes
+to Starlink applications. So far these have been restricted to
+applications that open an input file with read access and then open an
+output file with read/write access. If the input file and output file
+are the same file (for example when copying a structure within a
+file), HDS had no issue with this but with this HDF5 strictly
+forbidden due to the internal tracking of open files. The changes to
+\textsc{Figaro} \citep[][\ascl{1203.013}]{1993ASPC...52..219S} and
+\textsc{Hdstools} \citep{SUN245} result in the input being opened to
+validate it but recording the full path to the requested object. Then
+the input is closed and the output re-opened in read/write mode. Once
+this happens the input file can be re-opened and the application can
+continue as before. The modification also work with \old\ so can be
+adopted at the expense of some more convoluted code.
+
+When designing the mapping of HDS to HDF5 some care was taken to not
+deliberately restrict the ability of the \new\ library to read HDF5
+files that were not created by the library. To that end, attributes
+were chosen that were either already in common usage, e.g.,
+\texttt{CLASS}, or were chosen such that the absence of the attribute
+would result in reasonable behavior (root naming and structure
+dimensions). The mismatch in data models can not work miracles
+though. In particular, the HDS data model has no concept of attributes
+in the sense that HDF5 has them. Figure~\ref{fig:h5traces} shows the
+output of an HDS tracing program on a file created from a FITS file
+as described by \citet{O4-4_adassxxiv}. HDS is able to read some of
+the file contents but fails to read groups with names that exceed 16
+characters. This limit can be increased by recompiling all Starlink
+applications but HDS relies on this limit being fixed at compile time.
+A more complex solution would be for HDS to return a shortened form of
+the name to the HDS API, possibly keeping track of the mapping from
+long name to short name internally. It is currently unclear how
+important it will be to handle this situation. What is not obvious
+from this trace is that the \texttt{HEADER} structure is not empty;
+all the FITS headers are stored as attributes.
+
+\begin{figure}
+\small
+\begin{verbatim}
+HDF5ROOT  <HDFITS>
+
+ PRIMARY      <HDU>      {structure}
+   DATA(35,35)  <_WORD>  5419,5419,5332,6025,
+                         ... 6659,6659,6572
+   HEADER       <HDF5NATIVEGROUP> {structure}
+      {structure is empty}
+
+!! Invalid name string 'Photometric CALTABLE'
+!  specified; more than 16 characters long
+\end{verbatim}
+\caption{Output from the HDS structure tracing application,
+  \textsc{hdstrace} on an HDF5 file created without using the HDS
+  library. HDS has read the \texttt{CLASS} attributes when available
+  and replaced optional attribute values with placeholders for the
+  name of the root group and the type of the \texttt{HEADER}
+  structure. Unfortunately a group in the file has a name that exceeds
+  the HDS fixed-width limit preventing HDS from accessing it.}
+\label{fig:h5traces}
+\end{figure}
+
+\section{Metrics}
+
+When considering adoption of a new format it is important to
+consider any performance differences and whether the files use up
+differing amounts of storage.
+
+\subsection{File Sizes}
+
+\begin{table*}[ht]
+  \caption{A comparison of file sizes resulting from identical
+    operations where solely the file format is changed. Sizes are
+    given for the natives files and gzipped versions. Also included
+    are the sizes from using HDF5 native SHUFFLE/GZIP compression.
+    The first two rows are from files that are continuously updated
+    during processing; the remaining rows are from statically created
+    data sets. All files sizes are in bytes.}
+\label{tab:size}
+\begin{center}
+\begin{tabular}{lrrcrrcr}
+\hline
+File type &  \old\ & \new\  & v5/v4 & \old\ (gz) & \new (gz) & v5(gz)/v4(gz)
+& HDF5 comp.\\ \hline
+
+AGI database & 35\,328 & 191\,664 & 5.43 & 4\,473 & 9\,689& 2.17  & 403\,608\\
+Parameter file & 5\,632 & 18\,600 & 3.30 & 745 & 1\,318 & 1.77 &  19\,800\\
+SCUBA-2 & 18\,712\,576 & 18\,796\,530 & 1.00 & 15\,530\,536 &
+15\,537\,267 & 1.00 & 14\,660\,769 \\
+Kappa logo & 406\,016 & 411\,272 & 1.01 & 30\,633 & 31\,123 & 1.02 & 53\,827\\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
+
+Test datasets were generated comparing the new format file sizes with
+the original file sizes. A comparison is shown in
+Table~\ref{tab:size}. The files were generated as follows:
+
+\begin{enumerate}
+\item The AGI graphics database generated by the \textsc{SpecDRE}
+  demonstration script (\ascl{1407.003}). The graphics database makes
+  extensive use of arrays of structures and resizing of elements. The
+  HDF5 variant is more than five times larger than the \old\ variant
+  with 20\,\% of that accounted for by empty space.
+
+\item An ADAM parameter file generated from the execution of the
+  \textsc{ccdbig} \citep{SSN69} exercise script. 34\,\% of the HDF5
+  file is empty space. Like the graphics database file, this file is
+  updated constantly during program execution.
+
+\item A SCUBA-2 acquisition file \citep{2014SPIE.9153E..03B}, which contains
+  lots of data as well as table structures and is written in a single operation.
+
+\item Kappa (\ascl{1403.022}) logo image consisting of a simple NDF
+  with WCS and FITS header.
+\end{enumerate}
+
+The numbers indicate that for small files with many structures the
+\new\ files are significantly larger. Some of this may be due to the
+inability to resize datasets without deleting them but even if the
+files are repacked they are still larger than \old\ versions.  For
+larger data files the situation is less clear cut with the scientific
+data dominating the file contents the overhead from HDF5 is much
+lower. The advantages of HDF5 become obvious once native data
+compression is used with the SCUBA-2 example file becoming 6\,\%
+smaller than even the gzipped version of the \old\ format.
+
+
+\subsection{Benchmarks}
+
+The library has been tested on a number of standard Starlink benchmark
+routines from \textsc{ccdpack} \citep[][\ascl{1403.021}]{SUN139},
+\textsc{ccdbig}, and \textsc{starbench} \citep{SSN23}. An example data reduction
+test was also executed using SCUBA-2 data and the \textsc{orac-dr}
+pipeline \citep[][\ascl{1310.001}]{2015oracdr}\footnote{These were
+  observations 28, 31, 35, 44 and 51  from 2012 June 11th, reduced
+  using the JCMT Science Archive public processing recipe
+  \citep{2014SPIE9152-93}}. The results are shown in
+Table~\ref{tab:bench} and indicate that for tasks using lots of small
+files with lots of I/O \old\ is much faster. As the tests begin to use
+more real-world processing tasks with larger datasets the difference
+disappears and both libraries perform to within a few per cent. The
+final test involving \textsc{orac-dr} indicates that there may be a
+small performance advantage to not using memory mapping and this
+result may inform later decisions on whether to switch to using
+resizable chunked datasets in the future.
+
+\begin{table}
+\caption{Various Starlink benchmarking tests. All times are in
+  seconds. The items with an asterisk indicate the benchmark was run
+  with memory mapping disabled.}
+\label{tab:bench}
+\begin{center}
+\begin{tabular}{lrrr}
+\hline
+   & \old\ & \new\ & v5/v4 \\ \hline
+\textsc{starbench/specdre} & $0.82\pm0.02$ & $1.25\pm0.01$ & 1.52\\
+\textsc{starbench/kappa} & $8.58\pm0.46$ & $9.88\pm0.09$ & 1.15\\
+\textsc{ccdpack} & $5.02\pm0.08$ & $5.79\pm0.02$ & 1.15\\
+\textsc{ccdbig} & $55.42\pm0.59$ & $54.04\pm0.07$ & 0.98\\
+\textsc{ccdbig}(*) & $56.08\pm0.28$ & $54.64\pm0.19$ & 0.97\\
+\textsc{orac-dr} & $486\pm5$ & $482\pm7$ & 0.99\\
+\textsc{orac-dr}(*) & $450\pm2$ & $465\pm3$ & 1.03\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+
+
+\section{Conclusion}
+
+A new HDF5-based implementation of the HDS programming interface has
+been written which allows the Starlink software collection to be moved
+to a more widely-used file format. All but a handful of the
+approximately 150 HDS API functions have been implemented, with the
+remaining few being the routines that query low level implementation
+details. The \new\ library consists of approximately 10\,000 lines of
+C with another 5\,000 lines of C for the implementation of the wrapper
+(many of those lines are generated automatically). For comparison, the
+\old\ library consisted of about 18\,000 lines of C and HDF5 itself
+consists of about 120\,000 lines of C.
+
+It has been shown that the library performs as well as the \old\
+implementation in most cases involving reasonably-sized datasets and
+opens up the possibility for Starlink data products to be more easily
+consumed by others without requiring a format conversion. Although a
+native Python HDS interface does exist, \texttt{h5py}
+\citep[e.g.,][]{pyhdf5} has a much lower barrier to entry for Python
+programmers. The Starlink open-source community must now decide
+whether to pursue this work and integrate it into upstream. It is
+possible that the project will decide to stick with \old\ and attempt
+to update the library to support 64-bit dimension sizes. This is a
+reasonable course of action to take, with an uncertain effort
+requirement, although it does not solve the issues relating to lack of
+documentation and sociological barrier to adoption of the Starlink
+software.
+
+This work also provides an alternative approach to porting FITS files to
+HDF5 format \citep[see e.g.,][for other options]{O4-4_adassxxiv}. The Starlink
+\textsc{convert} package \citep{1997STARB..19...14C,SUN55} has
+received significant development effort over the years to map FITS to
+a hierarchical data model. It will be interesting to see whether the
+community can agree on a standard model for FITS to HDF5 conversion.
+
+Now that a functioning prototype exist and has been proven to work
+acceptably, we must consider the possibility of expanding the HDS API
+to take advantage of HDF5 features. In particular compound datatypes
+provide the prospect of native table access (FITS binary tables would
+benefit significantly from this), an updated slicing API could provide
+access to hyperslabs, and the ability to specify chunking size and the
+maximum expected size of a dataset could result in signficant
+efficiency benefits, albeit at the expense of memory mapping. It may
+be possible to consider allowing the HDS and HDF5 APIs to be used
+simultaneously on a single file. This has many attractions and
+provides a simple path to enhancing native applications. It also would
+mean it would be impossible to switch HDS from HDF5 to another format
+in the future. If the Advanced Scientific Data Format (ASDF)
+\citep{asdf} were to suddenly become popular in astronomy it would be
+conceivable to investigate a port of the HDS API to ASDF. If HDF5
+identifiers had been used natively in the code this would be a
+significantly more complicated task. This is somewhat similar to the
+problems that are faced in porting NDF to other formats. The NDF
+standard \citep{SGP38} was specifically designed with an ``airlock''
+API that allowed the user to obtain an HDS locator to extensions. This
+flexibility was important in early adoption and provided an easy way
+for extensions to be implemented. It also meant that any attempt to
+switch NDF absolutely required that the HDS API was itself ported,
+otherwise all the extensions in use would be unreadable. Indeed one key
+motivation for this work is that it brings NDF along to HDF5 without
+any NDF code or applications that use extensions having to be
+modified.
+
+\section{Acknowledgments}
+
+This research has made use of NASA's Astrophysics Data System.  The
+Starlink software is an open-source project that is maintained by the
+Joint Astronomy Centre, Hawaii. I thank Peter Draper and David Berry
+for testing development releases of the new library.
+
+The source code for the new HDS library and the Starlink software
+(\ascl{1110.012}) is open-source and is available on Github at
+\htmladdnormallink{https://github.com/Starlink}.
+
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as normal sections
+
+
+%% References
+%%
+%% Following citation commands can be used in the body text:
+%%
+%%  \citet{key}  ==>>  Jones et al. (1990)
+%%  \citep{key}  ==>>  (Jones et al., 1990)
+%%
+%% Multiple citations as normal:
+%% \citep{key1,key2}         ==>> (Jones et al., 1990; Smith, 1989)
+%%                            or  (Jones et al., 1990, 1991)
+%%                            or  (Jones et al., 1990a,b)
+%% \cite{key} is the equivalent of \citet{key} in author-year mode
+%%
+%% Full author lists may be forced with \citet* or \citep*, e.g.
+%%   \citep*{key}            ==>> (Jones, Baker, and Williams, 1990)
+%%
+%% Optional notes as:
+%%   \citep[chap. 2]{key}    ==>> (Jones et al., 1990, chap. 2)
+%%   \citep[e.g.,][]{key}    ==>> (e.g., Jones et al., 1990)
+%%   \citep[see][pg. 34]{key}==>> (see Jones et al., 1990, pg. 34)
+%%  (Note: in standard LaTeX, only one note is allowed, after the ref.
+%%   Here, one note is like the standard, two make pre- and post-notes.)
+%%
+%%   \citealt{key}          ==>> Jones et al. 1990
+%%   \citealt*{key}         ==>> Jones, Baker, and Williams 1990
+%%   \citealp{key}          ==>> Jones et al., 1990
+%%   \citealp*{key}         ==>> Jones, Baker, and Williams, 1990
+%%
+%% Additional citation possibilities
+%%   \citeauthor{key}       ==>> Jones et al.
+%%   \citeauthor*{key}      ==>> Jones, Baker, and Williams
+%%   \citeyear{key}         ==>> 1990
+%%   \citeyearpar{key}      ==>> (1990)
+%%   \citetext{priv. comm.} ==>> (priv. comm.)
+%%   \citenum{key}          ==>> 11 [non-superscripted]
+%% Note: full author lists depends on whether the bib style supports them;
+%%       if not, the abbreviated list is printed even when full requested.
+%%
+%% For names like della Robbia at the start of a sentence, use
+%%   \Citet{dRob98}         ==>> Della Robbia (1998)
+%%   \Citep{dRob98}         ==>> (Della Robbia, 1998)
+%%   \Citeauthor{dRob98}    ==>> Della Robbia
+
+
+%% References with bibTeX database:
+
+\bibliographystyle{model2-names-astronomy}
+\bibliography{achds}
+
+%% Authors are advised to submit their bibtex database files. They are
+%% requested to list a bibtex style file in the manuscript if they do
+%% not want to use model2-names.bst.
+
+%% References without bibTeX database:
+
+% \begin{thebibliography}{00}
+
+%% \bibitem must have one of the following forms:
+%%   \bibitem[Jones et al.(1990)]{key}...
+%%   \bibitem[Jones et al.(1990)Jones, Baker, and Williams]{key}...
+%%   \bibitem[Jones et al., 1990]{key}...
+%%   \bibitem[\protect\citeauthoryear{Jones, Baker, and Williams}{Jones
+%%       et al.}{1990}]{key}...
+%%   \bibitem[\protect\citeauthoryear{Jones et al.}{1990}]{key}...
+%%   \bibitem[\protect\astroncite{Jones et al.}{1990}]{key}...
+%%   \bibitem[\protect\citename{Jones et al., }1990]{key}...
+%%   \harvarditem[Jones et al.]{Jones, Baker, and Williams}{1990}{key}...
+%%
+
+% \bibitem[ ()]{}
+
+% \end{thebibliography}
+
+\end{document}
+
+%%
+%% End of file `elsarticle-template-2-harv.tex'.
