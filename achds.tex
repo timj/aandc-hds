@@ -224,7 +224,7 @@ format distributed on tape \citep{1980SPIE..264..298G}, and the NCSA
 Hierarchical Data Format would not be developed until the end of the
 decade \citep{HDF1,Folk2010}. It was therefore decided to develop a
 new file format from scratch. Initially called the Starlink Data
-System before being rebrand as HDS, the first version of the library
+System before being rebranded as HDS, the first version of the library
 was written in BLISS-32 before being ported to C on VAX/VMS in the
 late 1980s \citep{SSN27a}.
 
@@ -279,7 +279,7 @@ operation. The Starlink Software Collection continues to be developed
 as an open-source project sponsored by the Joint Astronomy Centre to
 continue support for their data reduction pipelines. Unfortunately
 none of the remaining developers understand how HDS works and there is
-no motivation for anyone to learn. The most recent description of the
+no incentive for anyone to learn given other development priorities. The most recent description of the
 internals of the HDS file format is in \citet{SSN27a} which documents
 version 2 of the format. Version 3 (from the port to Unix in 1991) and
 version 4 (in 2005 to support files larger than 2GB) remain
@@ -292,13 +292,18 @@ represents a risk for long-term access to the data.
 
 The HDS library does not currently support 64-bit dimension
 sizes. This was partially implemented for version 4 of the format but
-does not work. It is not clear how much work it would be to finish
+was never completed. It is not clear how much work it would be to finish
 this work or whether anyone remaining can do so. As data rates
 increase it is clear that the next generation of heterodyne arrays
 \citep[e.g.,][]{jenness_spie2014} will generate data cubes that exceed
 the capacity of a 32-bit integer counter and these files will render
 the Starlink software and associated data pipelines unusable without
-HDS being upgraded.
+HDS being upgraded. Adding 64-bit support to HDS is a necessary but
+not sufficient step towards the applications supporting larger
+datasets, and most libraries and applications in Starlink will
+need to be updated to support 64-bit counters. HDS is the
+fundamental building block that has to be converted first, providing
+new APIs to allow both 32-bit and 64-bit application code to co-exist.
 
 \subsection{Data Compression}
 
@@ -311,13 +316,13 @@ requiring a temporary file, as well as FITS-style
 natively. Leveraging the HDF5 compression algorithms would be a very
 easy way to improve the data compression performance in NDF.
 
-\subsubsection{Native Tables}
+\subsection{Native Tables}
 
 Unlike FITS \citep{1988A&AS...73..365H} or HDF5, HDS does not have a
 native table data structure. Tables must be implemented as a
 collection of independent columns and this can be extremely
-inefficient for row access. Switching data formats raises the
-possibility to add a native table access API to HDS.
+inefficient for row access. Switching data formats would make it
+possible to add a native table access API to HDS.
 
 \subsection{Sociology}
 
@@ -325,14 +330,17 @@ One of the impediments to adoption of the NDF data model is that the
 reference library implementation uses HDS as the underyling file
 format. Whilst the NDF data model itself does not require HDS and
 could be implemented by anyone with sufficient effort available, to
-adopt NDF currently requires that users adopt HDS. This is true for
-all the Starlink applications which require the \textsc{convert}
-package be used to migrate from FITS and other formats to NDF/HDS.
-Adopting HDF5 would considerably lower the barrier to entry and make
+adopt NDF currently requires that users adopt HDS.
+Adopting HDF5 would considerably lower the barrier to entry for people
+more comfortable in the HDF5 world or who are considering switching
+from another format, and make
 data files accessible to tools such as \texttt{HDFview} and
 \texttt{h5py}. Of course, none of these tools will understand the NDF
 data model that defines the hierarchical grouping but it makes it
 easier for other tools to adopt some of the same conventions.
+Similarly, the Starlink file format conversion tools \citep{SUN55} would be able
+to import formats such as FITS to HDF5 and this infrastructure may
+prove to be useful for people who are themselves switching to HDF5.
 
 \section{Features of HDS}
 
@@ -389,7 +397,7 @@ All HDS components are typed and this includes structures. Structure
 typing is important in HDS as it can be used by an application to
 decide whether a structure can be understood or not. In object-oriented
 nomenclature the type can be thought of as the object class, whereas the
-name of the structure is an object instance.
+individual named structure is an object instance.
 
 HDS supports the concept of arrays of structures to allow a collection
 of identical structures to be grouped together. This is used
@@ -530,8 +538,8 @@ that create files, functions that copy from one locator to another,
 and functions that work with a single locator.
 
 When a request is made to open a new file, it is first sent to the
-\old\ library to see if it opens. If that fails because with a format
-invalid error the \new\ library is used to open the file. This will be
+\old\ library to see if it opens. If that fails due to the format
+being invalid, the \new\ library is used to open the file. This will be
 inefficient when files are mainly in the newer format but it is
 currently proving unreliable to use the \new\ library first. The
 reason for this is that the HDF5 library has limited error codes for
@@ -546,7 +554,7 @@ update in the same process).
 When files are to be created the choice of format is controlled by a
 tuning parameter. Tuning parameters in HDS can be set programmatically
 or by reading the environment. By default, files are still created in
-\old\ format using the principal of least surprise. The ability to
+\old\ format using the principle of least surprise. The ability to
 control this behavior from an environment variable simplifies testing
 and benchmarking.
 
@@ -577,12 +585,12 @@ forwarding scheme to be changed relatively easily.
 
 As mentioned previously, a \locator\ is an opaque C \texttt{struct}
 containing information about a particular object in the HDS file. The
-sizeof of these \texttt{HDSLoc*} structures differs between the two
+size of of these structures differs between the two
 implementations and this required that a change be made to the Fortran
 interface of the HDS library. For historical reasons an HDS \locator\
 is stored in a Fortran character array with a length specified by the
 HDS constant \texttt{DAT\_\_SZLOC} (currently 16 characters). In
-\old\ the C structure is really a proxy to an internal data
+\old\ the C structure is really a proxy for an internal data
 structure and the Fortran interface copied the contents of the
 structure to and from the Fortran string. In \new, the C
 structure is significantly larger and it was unreasonable to increase
@@ -725,14 +733,16 @@ provide the metadata required by HDS.
 
 In HDF5 the file is kept open until all identifiers associated with a
 file are closed. HDS distinguishes primary identifiers from secondary
-identifiers such that a file is only kept open when the primary count
-hits zero even if secondary identifiers remain. To implement this in
+identifiers such that a file is closed when the count of active
+primary locators reaches zero, even if some active secondary locators
+remain. To implement this in
 \new\ it is necessary to store every locator that is allocated in a
 global data structure. We use the \texttt{uthash} macros \citep{uthash} to
-implement a hash table indexed by the HDF5 file identifier where each
-key corresponds to a value of a \texttt{utarray} dynamic array
-containing the locators with each locator having a flag indicating
-whether it is primary or secondary. The \texttt{uthash} macros were
+implement a hash table indexed by the HDF5 file identifier. Each
+file identifier key then maps to a \texttt{utarray} dynamic array
+containing the locators. The individual locators have a flag indicating
+whether they are primary or secondary.
+The \texttt{uthash} macros were
 chosen since they did not require an additional library, they used a
 BSD license that was compatible with the \new\ library license, and
 the programming interface was reasonably straightforward.
@@ -795,7 +805,7 @@ indicate where a conversion was not possible.
 
 \subsection{Memory mapping}
 
-An important requirement for any HDS implementation has been to
+An important requirement for any HDS implementation is to
 support direct memory mapping of files for both read and write
 operations. This has worked well over the years and helps minimize
 resource requirements. HDF5 has other priorities and advocates chunked
@@ -1071,7 +1081,8 @@ modified.
 This research has made use of NASA's Astrophysics Data System.  The
 Starlink software is an open-source project that is maintained by the
 Joint Astronomy Centre, Hawaii. I thank Peter Draper and David Berry
-for testing development releases of the new library.
+for testing development releases of the new library. I thank David
+Berry for comments on the draft manuscript.
 
 The source code for the new HDS library and the Starlink software
 (\ascl{1110.012}) is open-source and is available on Github at
