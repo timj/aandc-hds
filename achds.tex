@@ -148,7 +148,7 @@ astronomy file format and library for over 30 years. Development of the library
 was frozen ten years ago when funding for Starlink was stopped and almost no-one
 remains who understands the implementation details. To ensure the
 long-term sustainability of the Starlink application software and to
-make the extensible N-Dimensional Data Format for acessible to a
+make the extensible N-Dimensional Data Format acessible to a
 broader range of users, we propose to re-implement the HDS library
 application interface as a layer on top of the Hierarchical Data
 Format version 5. We present an overview of the new implementation of
@@ -278,7 +278,7 @@ The Starlink Project was closed in 2005 after 25 years of
 operation. The Starlink Software Collection continues to be developed
 as an open-source project sponsored by the Joint Astronomy Centre to
 continue support for their data reduction pipelines. Unfortunately
-none of the remaining developers understand how HDS works and there is
+none of the remaining developers understand the implementation details and there is
 no incentive for anyone to learn given other development priorities. The most recent description of the
 internals of the HDS file format is in \citet{SSN27a} which documents
 version 2 of the format. Version 3 (from the port to Unix in 1991) and
@@ -501,10 +501,11 @@ close similarity in key parts of the data model between it and HDS, it
 was decided to write a prototype implementation of the HDS API in
 terms of HDF5. This would provide information on the feasibility of
 the approach and also highlight the areas where the data models or
-access models diverge. The previous version of HDS was version 4 so it
-was decided this version would be version 5\footnote{Somewhat
+access models diverge. The previous version of HDS\footnote{Somewhat
   confusingly the library implementing version 4 of the file format is
-  itself version 5}. In the rest of this paper we use the shorthand
+  itself version 5} was version 4 so it
+was decided this version would be version 5.
+In the rest of this paper we use the shorthand
 \new\ to refer to the new library implementation and format, and \old\
 to refer to the current version of the HDS format and library.
 
@@ -848,7 +849,7 @@ to Starlink applications. So far these have been restricted to
 applications that open an input file with read access and then open an
 output file with read/write access. If the input file and output file
 are the same file (for example when copying a structure within a
-file), HDS had no issue with this but with this HDF5 strictly
+file), HDS had no issue with this but in HDF5 this is strictly
 forbidden due to the internal tracking of open files. The changes to
 \textsc{Figaro} \citep[][\ascl{1203.013}]{1993ASPC...52..219S} and
 \textsc{Hdstools} \citep{SUN245} result in the input being opened to
@@ -1048,7 +1049,7 @@ received significant development effort over the years to map FITS to
 a hierarchical data model. It will be interesting to see whether the
 community can agree on a standard model for FITS to HDF5 conversion.
 
-Now that a functioning prototype exist and has been proven to work
+Now that a functioning prototype exists and has been proven to work
 acceptably, we must consider the possibility of expanding the HDS API
 to take advantage of HDF5 features. In particular compound datatypes
 provide the prospect of native table access (FITS binary tables would
