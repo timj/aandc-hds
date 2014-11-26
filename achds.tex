@@ -148,7 +148,7 @@ astronomy file format and library for over 30 years. Development of the library
 was frozen ten years ago when funding for Starlink was stopped and almost no-one
 remains who understands the implementation details. To ensure the
 long-term sustainability of the Starlink application software and to
-make the extensible N-Dimensional Data Format acessible to a
+make the extensible N-Dimensional Data Format accessible to a
 broader range of users, we propose to re-implement the HDS library
 application interface as a layer on top of the Hierarchical Data
 Format version 5. We present an overview of the new implementation of
@@ -327,7 +327,7 @@ possible to add a native table access API to HDS.
 \subsection{Sociology}
 
 One of the impediments to adoption of the NDF data model is that the
-reference library implementation uses HDS as the underyling file
+reference library implementation uses HDS as the underlying file
 format. Whilst the NDF data model itself does not require HDS and
 could be implemented by anyone with sufficient effort available, to
 adopt NDF currently requires that users adopt HDS.
@@ -772,9 +772,9 @@ than a core dump.
 
 \subsection{Locator groups}
 
-Locator groups are not a featue of HDF5 and were implemented natively
+Locator groups are not a feature of HDF5 and were implemented natively
 in the \new\ library. The implementation is similar to the primary
-locator system describied previously except that the key for the
+locator system described previously except that the key for the
 \texttt{uthash} mapping table is the group name rather than the file
 identifier. When a group is flushed, all locators in the group are
 annulled and the group is deleted from the hash table.
@@ -1055,7 +1055,7 @@ to take advantage of HDF5 features. In particular compound datatypes
 provide the prospect of native table access (FITS binary tables would
 benefit significantly from this), an updated slicing API could provide
 access to hyperslabs, and the ability to specify chunking size and the
-maximum expected size of a dataset could result in signficant
+maximum expected size of a dataset could result in significant
 efficiency benefits, albeit at the expense of memory mapping. It may
 be possible to consider allowing the HDS and HDF5 APIs to be used
 simultaneously on a single file. This has many attractions and
