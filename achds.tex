@@ -47,7 +47,7 @@
 %% The amsthm package provides extended theorem environments
 %% \usepackage{amsthm}
 
-\usepackage[pdftex,draft,pdfpagemode={UseOutlines},bookmarks,bookmarksopen,colorlinks,linkcolor={blue},citecolor={green},urlcolor={red}]{hyperref}
+\usepackage[pdftex,pdfpagemode={UseOutlines},bookmarks,bookmarksopen,colorlinks,linkcolor={blue},citecolor={green},urlcolor={red}]{hyperref}
 \usepackage{hypernat}
 
 %% Alternatives to hyperref for testing
@@ -456,7 +456,7 @@ and primitives and does not affect the file itself.
 
 For primitive arrays, the data to be stored or the data to be
 retrieved do not have to be the same type as the format of the data
-stored in disk. Floating point data will be converted to integer and
+stored on disk. Floating point data will be converted to integer and
 vice versa. Also, string and logical/boolean types will be converted
 to numbers and numbers can be retrieved as strings or
 logicals. Endianness and floating point representation is also handled
@@ -527,7 +527,7 @@ In order to support both new and old file formats it was necessary for
 the new library to have access to a complete copy of the existing
 library. The HDF5-based library and the \old\ library are both
 standalone libraries that are linked in to a wrapper library that
-implements the public interface. The versioned libraries can be
+implements the public interface (see Fig.~\ref{fig:arch}). The versioned libraries can be
 configured to provide the public API but when used as part of the
 unified wrapper they are built with names that include the version
 number to avoid symbol clashes.
@@ -570,7 +570,7 @@ have taken a slightly different approach to that described in
 \citet{2004Rew}. In that paper they registered function table lookups
 with the newly created data objects, allowing efficient forwarding to
 the particular library. We decided to take a simpler approach whereby
-the locator structure in \old\ and \new\ were adjusted so that they
+the locator structures in \old\ and \new\ were adjusted so that they
 both included a version integer as the first member. The wrapper code
 then simply checks for the version number in the structure and calls the
 relevant routine. This approach does simplify the addition of
@@ -856,7 +856,7 @@ forbidden due to the internal tracking of open files. The changes to
 validate it but recording the full path to the requested object. Then
 the input is closed and the output re-opened in read/write mode. Once
 this happens the input file can be re-opened and the application can
-continue as before. The modification also work with \old\ so can be
+continue as before. The modification also works with \old\ so can be
 adopted at the expense of some more convoluted code.
 
 When designing the mapping of HDS to HDF5 some care was taken to not
@@ -865,8 +865,9 @@ files that were not created by the library. To that end, attributes
 were chosen that were either already in common usage, e.g.,
 \texttt{CLASS}, or were chosen such that the absence of the attribute
 would result in reasonable behavior (root naming and structure
-dimensions). The mismatch in data models can not work miracles
-though. In particular, the HDS data model has no concept of attributes
+dimensions). However, the implementation can not work miracles in
+dealing with the mismatch between the HDS and HDF5 data models.
+In particular, the HDS data model has no concept of attributes
 in the sense that HDF5 has them. Figure~\ref{fig:h5traces} shows the
 output of an HDS tracing program on a file created from a FITS file
 as described by \citet{O4-4_adassxxiv}. HDS is able to read some of
@@ -900,7 +901,10 @@ HDF5ROOT  <HDFITS>
   and replaced optional attribute values with placeholders for the
   name of the root group and the type of the \texttt{HEADER}
   structure. Unfortunately a group in the file has a name that exceeds
-  the HDS fixed-width limit preventing HDS from accessing it.}
+  the HDS fixed-width limit preventing HDS from accessing it. Furthermore,
+  the \texttt{HEADER} structure is not in fact empty as all the FITS headers
+  are actually stored as HDF5 attributes and these are invisible to the HDS
+  data model.}
 \label{fig:h5traces}
 \end{figure}
 
@@ -1028,13 +1032,18 @@ C with another 5\,000 lines of C for the implementation of the wrapper
 consists of about 120\,000 lines of C.
 
 It has been shown that the library performs as well as the \old\
-implementation in most cases involving reasonably-sized datasets and
+implementation in most tests involving reasonably-sized datasets and
 opens up the possibility for Starlink data products to be more easily
-consumed by others without requiring a format conversion. Although a
-native Python HDS interface does exist, \texttt{h5py}
-\citep[e.g.,][]{pyhdf5} has a much lower barrier to entry for Python
-programmers. The Starlink open-source community must now decide
-whether to pursue this work and integrate it into upstream. It is
+consumed by others without requiring a format conversion. A native
+Python interface to the HDS library does exist but it is far easier to
+convince prospective consumers of the data files to use something
+such as \texttt{h5py} \citep[e.g.,][]{pyhdf5} to read the data, albeit
+with a different view of the data models. Furthermore, these files
+would be readable by general HDF5 visualization tools.
+
+The Starlink open-source community must now decide
+whether to pursue this work and integrate it into the Starlink
+software distribution. It is
 possible that the project will decide to stick with \old\ and attempt
 to update the library to support 64-bit dimension sizes. This is a
 reasonable course of action to take, with an uncertain effort
