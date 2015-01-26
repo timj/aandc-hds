@@ -283,9 +283,10 @@ no incentive for anyone to learn given other development priorities. The most re
 internals of the HDS file format is in \citet{SSN27a} which documents
 version 2 of the format. Version 3 (from the port to Unix in 1991) and
 version 4 (in 2005 to support files larger than 2GB) remain
-undocumented with an assumption that the design closely matches the
+undocumented, outside of extensive comments in the code itself,
+with an assumption that the design closely matches the
 original layout. For a data format that is used as an archive format
-\citep{2015Economou} this lack of documentation and understanding
+\citep[see e.g.,][]{2015Economou} this lack of documentation and understanding
 represents a risk for long-term access to the data.
 
 \subsection{64-bit dimension sizes}
@@ -467,7 +468,9 @@ transparently, and the native form is used when a file is created.
 One of the initial requirements for HDS was efficient access to data
 arrays. This was done using direct mapping of the relevant part of the
 file into memory\footnote{Using \texttt{mmap()} on POSIX systems} and
-was implemented for read and write operations.
+was implemented for read and write operations. The emory mapping facility
+can be enabled or disabled by use of an environment variable and an
+in-memory solution is used on systems that do not support memory mapping.
 
 \section{Requirements for an Updated Format}
 
