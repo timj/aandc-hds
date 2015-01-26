@@ -665,7 +665,8 @@ convert the HDF5 path of the structure
 \texttt{ROOT/HISTORY/ARRAY\_OF\_STRUCTURES\_CELL(3)} to the HDS path,
 just requires the removal of the fixed cell prefix to convert it to
 \texttt{ROOT.HISTORY(3)}\footnote{HDS uses dot separators rather than
-  directory separators when specifying a path within a data file}. The
+  directory separators when specifying a path within a data file. This
+  will be familiar to VMS users.}. The
 long structure name is hidden by the HDS library and only visible when
 the file is accessed using HDF5 tools. When an array of structures has
 been created the dimensionality is stored in an attribute named
