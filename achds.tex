@@ -1056,7 +1056,14 @@ to update the library to support 64-bit dimension sizes. This is a
 reasonable course of action to take, with an uncertain effort
 requirement, although it does not solve the issues relating to lack of
 documentation and sociological barrier to adoption of the Starlink
-software.
+software. Furthermore, if the new implementation is adopted, serious
+consideration must be made as to whether the approximately 4 million
+HDS files in the JCMT Science Archive \citep{2015Economou} should be
+converted to HDF5. There is a risk involved for the archive in terms
+of the cost of keeping the old versions around and whether the
+conversion has been done correctly. The benefit will be that the
+raw data archive will immediately become more accessible to the
+general astronomer.
 
 This work also provides an alternative approach to porting FITS files to
 HDF5 format \citep[see e.g.,][for other options]{O4-4_adassxxiv}. The Starlink
