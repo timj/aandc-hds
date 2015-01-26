@@ -673,23 +673,21 @@ HDF5 so this information is stored in an attribute with name
 \texttt{CLASS} following the convention used in other HDF5 data models
 such as the Image and Palette classes.
 
-For a comparison of the HDS view of a file with that of the HDF5
-library, here is a structure trace of a very simple NDF file generated
-by the HDS standard tracing tool, \textsc{hdstrace} \citep{SUN102}:
+Fig.~\ref{fig:compare} shows a comparison of the HDS and HDF5 view of
+the same data file.  These traces show that the mapping from HDS
+structure/primitive to HDF5 group/dataset is being followed with three
+attributes added to provide the metadata required by HDS.
 
-\begin{quote}
+
+\begin{figure}[!ht]
 \small
+(a)
 \begin{verbatim}
 IMAGE  <NDF>
   DATA_ARRAY  <ARRAY>     {structure}
     DATA(2)     <_INTEGER>   1,2
 \end{verbatim}
-\end{quote}
-and here is the corresponding dump of the HDF5 contents using the
-standard \texttt{h5dump} command (with the definition of the
-\texttt{H5T\_STRING} strings datatype elided for clarity)
-\begin{quote}
-\small
+(b)
 \begin{verbatim}
 GROUP "/" {
    ATTRIBUTE "CLASS" {
@@ -724,11 +722,17 @@ GROUP "/" {
    }
 }
 \end{verbatim}
-\end{quote}
-
-These traces show that the mapping from HDS structure/primitive to
-HDF5 group/dataset is being followed with two attributes added to
-provide the metadata required by HDS.
+\caption{Comparison of the HDS view of an HDF5 data file with the HDF5
+  view.
+  (a) Listing of a HDSv5 file using the standard HDS tracing tool,
+  \textsc{hdstrace} \citep{SUN102}.
+  (b) Listing of the HDF5 file corresponding to the HDS structures.
+  The definition of the
+  \texttt{H5T\_STRING} datatype has been elided for clarity. The
+  listing was made using the standard \texttt{h5dump} command.
+}
+\label{fig:compare}
+\end{figure}
 
 \subsection{Primary locators}
 
