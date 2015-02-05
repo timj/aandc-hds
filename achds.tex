@@ -747,7 +747,7 @@ primary locators reaches zero, even if some active secondary locators
 remain. To implement this in
 \new\ it is necessary to store every locator that is allocated in a
 global data structure. We use the \texttt{uthash} macros \citep{uthash} to
-implement a hash table indexed by the HDF5 file identifier. Each
+implement a hash table indexed by the \texttt{hid\_t} HDF5 file identifier. Each
 file identifier key then maps to a \texttt{utarray} dynamic array
 containing the locators. The individual locators have a flag indicating
 whether they are primary or secondary.
