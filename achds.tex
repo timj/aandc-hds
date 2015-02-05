@@ -543,17 +543,17 @@ and functions that work with a single locator.
 
 When a request is made to open a new file, it is first sent to the
 \old\ library to see if it opens. If that fails due to the format
-being invalid, the \new\ library is used to open the file. This will be
-inefficient when files are mainly in the newer format but it is
-currently proving unreliable to use the \new\ library first. The
-reason for this is that the HDF5 library has limited error codes for
-opening files and it is not possible to distinguish an error opening a
-file because of a format incompatibility and some other type of
-error. The HDF5 library does provide a routine for checking whether a
-file is an HDF5 file or not but unfortunately that routine returns
-false if the file has not yet been closed (which can happen in
-applications where the file is opened for write, and then opened for
-update in the same process).
+being invalid, the \new\ library is used to open the file. When
+migration to the new format is substantially complete the wrapper will
+be modified to default to using the \new\ library first. One caveat is
+that the library must ensure that \new\ files are written to disk
+immediately on creation\footnote{Calling \texttt{H5Fflush} in
+  \texttt{hdsNew}} such that the HDF5 superblock signature is written.
+Without this step \texttt{H5Fis\_hdf5} will not correctly determine
+that a newly created file is an HDF5 file if it has not yet been
+closed and some Starlink applications and libraries rely on the
+ability to create an HDS file and then open it in another part of the
+code without having annulled all previous locators beforehand.
 
 When files are to be created the choice of format is controlled by a
 tuning parameter. Tuning parameters in HDS can be set programmatically
