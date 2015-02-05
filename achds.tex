@@ -670,7 +670,11 @@ just requires the removal of the fixed cell prefix to convert it to
 long structure name is hidden by the HDS library and only visible when
 the file is accessed using HDF5 tools. When an array of structures has
 been created the dimensionality is stored in an attribute named
-\texttt{HDS\_STRUCTURE\_DIMS}.
+\texttt{HDS\_STRUCTURE\_DIMS}. In the future we will consider
+implementing structure arrays using the HDF5 feature allowing
+references to arbitrary HDF5 objects to be stored in a dataset, this
+would have the advantage of reducing the structure complexity and
+would simplify cell access.
 
 Finally, the data type of a structure is not a fundamental part of
 HDF5 so this information is stored in an attribute with name
