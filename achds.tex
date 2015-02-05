@@ -950,7 +950,13 @@ Kappa logo & 406\,016 & 411\,272 & 1.01 & 30\,633 & 31\,123 & 1.02 & 53\,827\\
 \end{table*}
 
 Test datasets were generated comparing the new format file sizes with
-the original file sizes. A comparison is shown in
+the original file sizes.\footnote{All these tests were done using the
+  default file access property list settings. Selecting the latest
+  format, via \texttt{H5Pset\_libver\_bounds}, results in slightly
+  smaller files for three of the four tests but a larger file in the
+  paameter file test. It has not yet been decided whether \new\ should
+  adopt maximal backwards compatibility for files or always be on the cutting
+  edge.}  A comparison is shown in
 Table~\ref{tab:size}. The files were generated as follows:
 
 \begin{enumerate}
